@@ -6,12 +6,12 @@ FROM ${BASE_IMAGE}
 LABEL description="Docker image for building or serving static website with the Hugo static site generator."
 LABEL maintainer="Romain THERRAT <romain@pockost.com>"
 
-ARG IMAGE_NAME
-ARG BUILD_DATE
-ARG VCS_URL
-ARG VCS_REF
+ARG VCS_URL="https://github.com/pockost/docker-hugo"
+ONBUILD ARG HUGO_TYPE=_extended
+ONBUILD ARG IMAGE_NAME=${IMAGE_NAME}
+ONBUILD ARG VCS_REF=${SOURCE_COMMIT}
 ONBUILD ARG VERSION
-ONBUILD ARG HUGO_TYPE="_extended"
+ONBUILD ARG BUILD_DATE
 
 ONBUILD ARG HUGO_ID=hugo${HUGO_TYPE}_${VERSION}
 
@@ -29,13 +29,14 @@ ONBUILD RUN tar -xf /tmp/${HUGO_ID}_Linux-64bit.tar.gz -C /tmp \
     && rm -rf /tmp/README.md
 
 # Add image labels (https://microbadger.com/labels)
-ONBUILD LABEL org.label-schema.schema-version="1.0" \
+LABEL org.label-schema.schema-version="1.0" \
       org.label-schema.vendor="POCKOST" \
-      org.label-schema.url="https://www.pockost.com/" \
-      org.label-schema.name="${IMAGE_NAME}" \
-      org.label-schema.version="${VERSION}" \
-      org.label-schema.build-date="${BUILD_DATE}" \
       org.label-schema.vcs-url=${VCS_URL} \
+      org.label-schema.name="${IMAGE_NAME}" \
+      org.label-schema.url="https://www.pockost.com/"
+
+ONBUILD LABEL org.label-schema.version="${VERSION}" \
+      org.label-schema.build-date="${BUILD_DATE}" \
       org.label-schema.vcs-ref=${VCS_REF}
 
 WORKDIR /src
