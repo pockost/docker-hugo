@@ -2,3 +2,35 @@
 
 BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 docker build --build-arg BUILD_DATE=$BUILD_DATE --build-arg IMAGE_NAME=${DOCKER_REPO} --build-arg VCS_REF=${SOURCE_COMMIT} -f $DOCKERFILE_PATH -t $IMAGE_NAME .
+
+#!/bin/bash
+
+set -x
+
+# Get list of modified project
+
+IMAGE_NAME=${DOCKER_REPO}
+files=$(git diff-tree --no-commit-id --name-only -r $SOURCE_COMMIT)
+
+get_version() {
+  # Check parent folder in order to find a Dockerfile and return project version
+  DIRECTORY=$1
+  test "$DIRECTORY" == "." && return
+  test -f $DIRECTORY/Dockerfile && echo "$DIRECTORY" || get_version $(dirname $DIRECTORY)
+}
+
+# Create array of version of project to build
+for file in $files
+do
+  VERSIONS_TO_BUILD="$VERSIONS_TO_BUILD\n$( get_version $file )"
+done
+VERSIONS_TO_BUILD=$( echo -e $VERSIONS_TO_BUILD | sort | uniq )
+
+for version in $VERSIONS_TO_BUILD
+do
+  TAG=$version
+  BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+
+  docker build --build-arg IMAGE_NAME="${IMAGE_NAME}" --build-arg VCS_REF="${SOURCE_COMMIT}" --build-arg BUILD_DATE="${BUILD_DATE}" -t ${IMAGE_NAME}:${version} $version
+  docker push ${IMAGE_NAME}:${version}
+done

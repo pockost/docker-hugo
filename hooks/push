@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Push in handle by build hook script
+
+exit 0
