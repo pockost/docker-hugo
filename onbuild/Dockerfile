@@ -1,15 +1,16 @@
 ARG BASE_IMAGE="alpine:latest"
 ARG IMAGE_NAME="hugo"
+ARG DESCRIPTION="Docker image for building or serving static website with the Hugo static site generator."
 
 FROM ${BASE_IMAGE}
 
-LABEL description="Docker image for building or serving static website with the Hugo static site generator."
+LABEL description=${DESCRIPTION}
 LABEL maintainer="Romain THERRAT <romain@pockost.com>"
 
 ARG VCS_URL="https://github.com/pockost/docker-hugo"
 ONBUILD ARG HUGO_TYPE=_extended
-ONBUILD ARG IMAGE_NAME=${IMAGE_NAME}
-ONBUILD ARG VCS_REF=${SOURCE_COMMIT}
+ONBUILD ARG IMAGE_NAME
+ONBUILD ARG VCS_REF
 ONBUILD ARG VERSION
 ONBUILD ARG BUILD_DATE
 
@@ -33,6 +34,7 @@ LABEL org.label-schema.schema-version="1.0" \
       org.label-schema.vendor="POCKOST" \
       org.label-schema.vcs-url=${VCS_URL} \
       org.label-schema.name="${IMAGE_NAME}" \
+      org.label-schema.description="${DESCRIPTION}" \
       org.label-schema.url="https://www.pockost.com/"
 
 ONBUILD LABEL org.label-schema.version="${VERSION}" \

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+docker build --build-arg BUILD_DATE=$BUILD_DATE --build-arg IMAGE_NAME=${DOCKER_REPO} --build-arg VCS_REF=${SOURCE_COMMIT} -f $DOCKERFILE_PATH -t $IMAGE_NAME .
