@@ -47,4 +47,4 @@ WORKDIR /src
 EXPOSE 1313
 
 ENTRYPOINT ["/usr/local/sbin/hugo"]
-CMD ["serve", "--bind='0.0.0.0'"]
+CMD ["serve", "--bind=0.0.0.0"]
