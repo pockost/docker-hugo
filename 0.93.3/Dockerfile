@@ -1,0 +1,4 @@
+ARG VERSION="0.93.3"
+ARG BASE_IMAGE="pockost/hugo:onbuild"
+
+FROM ${BASE_IMAGE}
