@@ -16,7 +16,7 @@ ONBUILD ARG BUILD_DATE
 ONBUILD ARG HUGO_ID=hugo${HUGO_TYPE}_${VERSION}
 
 RUN apk add --no-cache git asciidoctor libc6-compat libstdc++ \
-                       ca-certificates npm \
+                       ca-certificates npm gcompat \
  && npm install  -g postcss-cli
 
 ONBUILD ADD https://github.com/gohugoio/hugo/releases/download/v${VERSION}/${HUGO_ID}_linux-amd64.tar.gz /tmp
